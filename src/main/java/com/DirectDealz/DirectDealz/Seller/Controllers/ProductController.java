@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.DirectDealz.DirectDealz.Seller.Enum.ProductStatus;
@@ -32,23 +34,19 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public List<Product> findAllProducts(){
-        return service.getProducts();
+    public ResponseEntity<Object> findAllProducts(@RequestHeader String token){
+        return service.getProducts(token);
     }
 
     @GetMapping("/productById/{id}")
-    public Product findProductById(@PathVariable UUID id){
-        return service.getProductById(id);
+    public ResponseEntity<Object> findProductById(@PathVariable UUID id, @RequestHeader String token){
+        return service.getProductById(id, token);
     }
 
-    @GetMapping("/product/{name}")
-    public Product findProductbyName(@PathVariable String name){
-        return service.getProductByName(name);
-    }
 
     @PutMapping("/update")
-    public Product updateProduct(@RequestBody Product product){
-        return service.updateProduct(product);
+    public ResponseEntity<Object> updateProduct(@PathVariable UUID id, @RequestBody Product product,@RequestHeader String token){
+        return service.updateProduct(id, product, token);
     }
 
     @PutMapping("/productStatus/{id}/status/{status}")
@@ -58,8 +56,8 @@ public class ProductController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable UUID id){
-        return service.deleteProduct(id);
+    public ResponseEntity<Object> deleteProduct(@PathVariable UUID id,@RequestHeader String token ){
+        return service.deleteProduct(id, token);
     }
 
  
